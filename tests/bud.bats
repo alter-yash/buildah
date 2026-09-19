@@ -3006,6 +3006,11 @@ _EOF
   run_buildah build --label test $WITH_POLICY_JSON -t ${target} $BUDFILES/from-scratch
   run_buildah inspect --format '{{printf "%q" .Docker.Config.Labels}}' ${target}
   expect_output "$want_output"
+
+  want_output='map["io.buildah.version":"'$buildah_version'" "test":"$something"]'
+  run_buildah build --label 'test=$something' $WITH_POLICY_JSON -t ${target} $BUDFILES/from-scratch
+  run_buildah inspect --format '{{printf "%q" .Docker.Config.Labels}}' ${target}
+  expect_output "$want_output"
 }
 
 @test "bud-with-identity-label" {
